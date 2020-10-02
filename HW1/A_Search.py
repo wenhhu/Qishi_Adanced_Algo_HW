@@ -42,8 +42,8 @@ def ASearch(graph, start, end, h):
                 cameFrom[i] = cur
                 gScore[i] = tentativeGScore
                 fScore[i] = gScore[i]+h(i)
+                heapq.heappush(openHeap, [fScore[i], i])
                 if i not in openSet:
-                    heapq.heappush(openHeap, [fScore[i], i])
                     openSet.add(i)
 
     return -1, reconstructPath(cameFrom, end)
