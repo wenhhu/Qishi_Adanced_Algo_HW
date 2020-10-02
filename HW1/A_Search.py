@@ -13,8 +13,9 @@ def reconstructPath(cameFrom, cur):
 
 def ASearch(graph, start, end, h):
     # ASearch algorithm
-    openSet = [[0, start]]
-    heapq.heapify(openSet)
+    openHeap = [[0, start]]
+    openSet = set([start])
+    heapq.heapify(openHeap)
 
     gScore = {i:np.inf for i in graph}
     gScore[start] = 0
@@ -26,7 +27,11 @@ def ASearch(graph, start, end, h):
 
     while len(openSet):
         # Pop out the root of heap
-        curScore, cur = heapq.heappop(openSet)
+        while True:
+            curScore, cur = heapq.heappop(openHeap)
+            if cur in openSet:
+                break
+        openSet.remove(cur)
         # Check if target arrived
         if cur == end:
             return curScore, reconstructPath(cameFrom, end)
@@ -38,7 +43,8 @@ def ASearch(graph, start, end, h):
                 gScore[i] = tentativeGScore
                 fScore[i] = gScore[i]+h(i)
                 if i not in openSet:
-                    heapq.heappush(openSet, [fScore[i], i])
+                    heapq.heappush(openHeap, [fScore[i], i])
+                    openSet.add(i)
 
     return -1, reconstructPath(cameFrom, end)
 
@@ -60,8 +66,8 @@ if __name__ == '__main__':
     node = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
 
     for start, end in itertools.product(node, node):
-        # print(i)
-        distance, path = ASearch(graph, start, end, testH)
+        if start != end:
+            distance, path = ASearch(graph, start, end, testH)
 
-        print(distance)
-        print(path)
+            print(distance)
+            print(path)
