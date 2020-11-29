@@ -35,7 +35,7 @@ class Problem1:
                 else:
                     return reverse[:len(s) - 1] + s
 
-
+# LC 1392
 class Problem2:
     def longestPrefix(self, s: str) -> str:
         pmt = [0] * (len(s) + 1)
